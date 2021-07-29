@@ -1,17 +1,17 @@
 var firebaseConfig = {
-      apiKey: "AIzaSyDMXFNoxQ2yucRPpcygzRyyzM3oCxQ_TgY",
-      authDomain: "kwitter-game.firebaseapp.com",
-      databaseURL: "https://kwitter-game-default-rtdb.firebaseio.com",
-      projectId: "kwitter-game",
-      storageBucket: "kwitter-game.appspot.com",
-      messagingSenderId: "1056599167072",
-      appId: "1:1056599167072:web:bcac818200ea092af4f305",
-      measurementId: "G-GMYWRJDLKD"
+      apiKey: "AIzaSyAj3lwkdSWYjMkH1V82kADz-EgJQWxVP3o",
+      authDomain: "notebook-project-916a6.firebaseapp.com",
+      databaseURL: "https://notebook-project-916a6-default-rtdb.firebaseio.com",
+      projectId: "notebook-project-916a6",
+      storageBucket: "notebook-project-916a6.appspot.com",
+      messagingSenderId: "144298200368",
+      appId: "1:144298200368:web:f428059d83a5fe17004cf5",
+      measurementId: "G-P0ZC3KVYRJ"
     };
-    
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     username=localStorage.getItem("username");
-    room_name=localStorage.getItem("roomname");
+    room_name=localStorage.getItem("room_name");
 function getData() { firebase.database().ref("/"+room_name).on('value', function(snapshot) { document.getElementById("output").innerHTML = ""; snapshot.forEach(function(childSnapshot) { childKey  = childSnapshot.key; childData = childSnapshot.val(); if(childKey != "purpose") {
          firebase_message_id = childKey;
          message_data = childData;
@@ -24,12 +24,18 @@ namewithtag="<h4>"+name1+"<img class='user_tick' src='tick.png'></h4>";
 messagewithtag="<h4 class='message_h4'>"+message+"</h4>";
 like_button ="<button class='btn btn-warning' id="+firebase_message_id+" value="+like+" onclick='updateLike(this.id)'>";
              span_with_tag = "<span class='glyphicon glyphicon-thumbs-up'>Like: "+ like +"</span></button><hr>";
-             row=namewithtag+messagewithtag+like_button+span_withtag;
+             row=namewithtag+messagewithtag+like_button+span_with_tag;
              document.getElementById("output").innerHTML+=row;
 
       } });  }); }
 getData();
-
+function updateLike(messageid) {
+like=document.getElementById(messageid).value;
+updateLike1=Number(like)+1;
+firebase.database().ref(room_name).child(messageid).update({
+      like:updateLike1
+});
+}
 function send() {
       msg=document.getElementById("message").value;
       firebase.database().ref(room_name).push({
@@ -40,6 +46,6 @@ function send() {
       document.getElementById("message").value="";
 }function logout() {
       localStorage.removeItem("username");
-      localStorage.removeItem("roomname");
+      localStorage.removeItem("room_name");
       window.location="index.html";
 }
